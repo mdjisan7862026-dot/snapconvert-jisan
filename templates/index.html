@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapConvert - Free PDF & Image Converter</title>
+    <meta name="description" content="Convert images to PDF and PDF pages to JPG easily. Free, simple and easy to use.">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --background: #f4f6fb;
+            --text: #172033;
+            --muted: #64748b;
+            --white: #ffffff;
+            --border: #dbe2ee;
+            --green: #15803d;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 17px 20px;
+        }
+
+        .header-inner {
+            max-width: 1050px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .free-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 18px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 43px);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 13px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 17px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .tool-card {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 22px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .tool-card h2 {
+            font-size: 25px;
+            font-weight: 900;
+            margin-bottom: 7px;
+        }
+
+        .tool-description {
+            color: var(--muted);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .step-label {
+            display: block;
+            font-weight: 900;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .choose-button {
+            width: 100%;
+            min-height: 76px;
+            border: 3px dashed var(--primary);
+            border-radius: 15px;
+            background: #eef2ff;
+            color: var(--primary-dark);
+            font-size: 21px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .choose-button:hover {
+            background: #e0e7ff;
+            transform: translateY(-1px);
+        }
+
+        .file-status {
+            display: block;
+            margin: 12px 0 18px;
+            color: var(--muted);
+            font-size: 14px;
+            overflow-wrap: anywhere;
+            min-height: 22px;
+        }
+
+        .convert-button {
+            width: 100%;
+            min-height: 65px;
+            border: none;
+            border-radius: 14px;
+            background: var(--primary);
+            color: white;
+            font-size: 21px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--primary-dark);
+            transition: 0.15s;
+        }
+
+        .convert-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .convert-button:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--primary-dark);
+        }
+
+        .convert-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .small-note {
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 13px;
+        }
+
+        .ad-space {
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 28px 0;
+        }
+
+        .features {
+            margin-top: 35px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .features h2 {
+            font-size: 23px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 12px;
+            font-weight: 700;
+        }
+
+        .feature span {
+            display: block;
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                margin-top: 25px;
+                padding: 0 12px;
+            }
+
+            .tools {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .tool-card {
+                padding: 20px;
+            }
+
+            .tool-card h2 {
+                font-size: 23px;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="logo">📄 SnapConvert</div>
+            <div class="free-badge">100% FREE TO USE</div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Convert Files <span>In Seconds</span></h1>
+            <p>Choose your file, press convert, and download your result. Simple and easy for everyone.</p>
+        </section>
+
+        <div class="ad-space">
+            Advertisement
+        </div>
+
+        <section class="tools">
+
+            <div class="tool-card">
+                <div class="tool-icon">📸</div>
+
+                <h2>Image to PDF</h2>
+
+                <p class="tool-description">
+                    Turn your JPG, PNG or WebP photos into PDF files.
+                    You can choose multiple images together.
+                </p>
+
+                <form action="/convert" method="post" enctype="multipart/form-data"
+                      class="converter-form" data-mode="jpg_to_pdf">
+
+                    <input type="hidden" name="mode" value="jpg_to_pdf">
+
+                    <label class="step-label" for="image-files">
+                        STEP 1 — CHOOSE PHOTOS
+                    </label>
+
+                    <input
+                        class="file-input"
+                        id="image-files"
+                        type="file"
+                        name="files"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                        multiple
+                        required
+                    >
+
+                    <label class="choose-button" for="image-files">
+                        📂 CHOOSE PHOTOS
+                    </label>
+
+                    <div class="file-status" id="image-status" aria-live="polite">
+                        No photos selected yet
+                    </div>
+
+                    <label class="step-label">
+                        STEP 2 — CONVERT
+                    </label>
+
+                    <button class="convert-button" type="submit">
+                        CONVERT TO PDF ➜
+                    </button>
+
+                    <p class="small-note">
+                        Your converted PDFs will download in a ZIP file.
+                    </p>
+                </form>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">📑</div>
+
+                <h2>PDF to JPG</h2>
+
+                <p class="tool-description">
+                    Turn PDF pages into JPG images.
+                    Select multiple PDF files if needed.
+                </p>
+
+                <form action="/convert" method="post" enctype="multipart/form-data"
+                      class="converter-form" data-mode="pdf_to_jpg">
+
+                    <input type="hidden" name="mode" value="pdf_to_jpg">
+
+                    <label class="step-label" for="pdf-files">
+                        STEP 1 — CHOOSE PDF FILES
+                    </label>
+
+                    <input
+                        class="file-input"
+                        id="pdf-files"
+                        type="file"
+                        name="files"
+                        accept=".pdf,application/pdf"
+                        multiple
+                        required
+                    >
+
+                    <label class="choose-button" for="pdf-files">
+                        📂 CHOOSE PDF FILES
+                    </label>
+
+                    <div class="file-status" id="pdf-status" aria-live="polite">
+                        No PDF selected yet
+                    </div>
+
+                    <label class="step-label">
+                        STEP 2 — CONVERT
+                    </label>
+
+                    <button class="convert-button" type="submit">
+                        CONVERT TO JPG ➜
+                    </button>
+
+                    <p class="small-note">
+                        All converted page images will download in a ZIP file.
+                    </p>
+                </form>
+            </div>
+
+        </section>
+
+        <div class="ad-space">
+            Advertisement
+        </div>
+
+        <section class="features">
+            <h2>Why Use SnapConvert?</h2>
+
+            <div class="feature-list">
+                <div class="feature">
+                    <span>👆</span>
+                    Big, easy-to-use buttons
+                </div>
+
+                <div class="feature">
+                    <span>🔒</span>
+                    Files processed on this server
+                </div>
+
+                <div class="feature">
+                    <span>💸</span>
+                    Free to use
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 SnapConvert. Simple tools for everyone.</p>
+        <p>Only upload files you have permission to use.</p>
+    </footer>
+
+    <script>
+        function setupFilePicker(inputId, statusId, emptyMessage) {
+            const input = document.getElementById(inputId);
+            const status = document.getElementById(statusId);
+
+            input.addEventListener("change", function () {
+                if (input.files.length === 0) {
+                    status.textContent = emptyMessage;
+                    return;
+                }
+
+                if (input.files.length === 1) {
+                    status.textContent = "Selected: " + input.files[0].name;
+                } else {
+                    status.textContent =
+                        input.files.length + " files selected";
+                }
+            });
+        }
+
+        setupFilePicker(
+            "image-files",
+            "image-status",
+            "No photos selected yet"
+        );
+
+        setupFilePicker(
+            "pdf-files",
+            "pdf-status",
+            "No PDF selected yet"
+        );
+
+        document.querySelectorAll(".converter-form").forEach(function (form) {
+            form.addEventListener("submit", function (event) {
+                const input = form.querySelector('input[type="file"]');
+
+                if (!input.files.length) {
+                    event.preventDefault();
+                    alert("Please choose your file first.");
+                    return;
+                }
+
+                const button = form.querySelector(".convert-button");
+                button.textContent = "CONVERTING... PLEASE WAIT";
+                button.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
